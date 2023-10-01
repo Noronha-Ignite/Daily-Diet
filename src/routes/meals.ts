@@ -25,12 +25,36 @@ export const mealsRoutes = async (app: FastifyInstance) => {
         name,
         description,
         is_within_diet: isWithinDiet,
-        meal_date: mealDate,
+        meal_date: mealDate ?? new Date().toUTCString(),
         user_id: user.id,
       })
       .returning('id')
 
     return reply.status(201).send({ mealId: createMealResponse.id })
+  })
+
+  app.get('/:mealId', async (req, reply) => {
+    const { user, params } = req as InjectUser<FastifyRequest>
+
+    const updateMealParamsSchema = z.object({
+      mealId: z.string(),
+    })
+
+    const { mealId } = updateMealParamsSchema.parse(params)
+
+    const meal = await knexClient('meals')
+      .select('*')
+      .where({
+        user_id: user.id,
+        id: mealId,
+      })
+      .first()
+
+    if (!meal) {
+      throw new Error('Meal not found')
+    }
+
+    return reply.status(200).send({ meal })
   })
 
   app.patch('/:mealId', async (req, reply) => {
@@ -64,6 +88,31 @@ export const mealsRoutes = async (app: FastifyInstance) => {
         id: mealId,
       })
 
-    return reply.status(200).send({ data: body })
+    return reply.status(200).send({
+      data: {
+        id: mealId,
+        name,
+        isWithinDiet,
+        description,
+        mealDate,
+      },
+    })
+  })
+
+  app.delete('/:mealId', async (req, reply) => {
+    const { user, params } = req as InjectUser<FastifyRequest>
+
+    const updateMealParamsSchema = z.object({
+      mealId: z.string(),
+    })
+
+    const { mealId } = updateMealParamsSchema.parse(params)
+
+    await knexClient('meals').delete().where({
+      user_id: user.id,
+      id: mealId,
+    })
+
+    return reply.status(200).send({ id: mealId })
   })
 }
