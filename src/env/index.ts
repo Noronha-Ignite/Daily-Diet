@@ -14,8 +14,9 @@ const envSchema = z.object({
   PORT: z.coerce.number().positive().default(3333),
 
   DB_CLIENT: z.string(),
-
   DB_URL: z.string(),
+
+  JWT_SECRET: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)
