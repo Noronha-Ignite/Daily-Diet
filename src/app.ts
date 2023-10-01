@@ -3,6 +3,7 @@ import fastify from 'fastify'
 
 import { env } from './env'
 import { authRoutes } from './routes/auth'
+import { mealsRoutes } from './routes/meals'
 
 export const app = fastify()
 
@@ -11,3 +12,4 @@ app.register(jwtPlugin, {
 })
 
 app.register(authRoutes)
+app.register(mealsRoutes, { prefix: 'meals' })

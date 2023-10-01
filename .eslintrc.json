@@ -2,7 +2,8 @@
   "extends": ["@rocketseat/eslint-config/node", "eslint:recommended", "plugin:import/errors", "plugin:import/warnings"],
   "plugins": ["import"],
   "rules": {
-    "import/order": ["error", {"alphabetize": {"order": "asc"}}]
+    "import/order": ["error", {"alphabetize": {"order": "asc"}}],
+    "no-undef": "off"
   },
   "settings": {
     "import/resolver": {
