@@ -1,4 +1,6 @@
-type UserTokenPayload = {
-  id: string
-  iat: number
-}
+type InjectUser<T> = {
+  user: {
+    id: string
+    iat: number
+  }
+} & Omit<T, 'user'>

@@ -15,6 +15,7 @@ declare module 'knex/types/tables' {
       name: string
       description?: string
       is_within_diet: boolean
+      meal_date: string
       created_at: string
     }
   }
